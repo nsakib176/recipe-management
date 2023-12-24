@@ -80,24 +80,19 @@ class AuthController extends Controller
     }
 
     // Logout user (invalidate token)
-    public function logout()
+    public function logout(Request $request)
     {
-        try {
-            // Revoke all tokens for the user
-            $tokens = Auth::user()->tokens;
-            foreach ($tokens as $token) {
-                $token->revoke();
-            }
-
+        try{
+            $request->user()->currentAccessToken()->delete();
             return response()->json([
                 'message' => 'User successfully logged out.'
             ]);
-
-        } catch (\Exception $e) {
+        }catch(\Exception $e){
             return response()->json([
-                'message' => 'Failed to logout.',
-                'error' => $e->getMessage()
+                'message' => 'Logout failed.',
+                'error' => $e->getMessage(),
             ], 400);
         }
     }
+    
 }
