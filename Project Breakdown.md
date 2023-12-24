@@ -60,11 +60,5 @@ Here's a more detailed breakdown of the Recipe Management API project:
 
 This is just a starting point, and you can customize the project further based on your interests and skills. Feel free to explore additional features, functionalities, and integrations to make your Recipe Management API unique and engaging.
 
-**Remember:**
 
-- Start small and focus on core functionalities first.
-- Gradually add complexity and features as you progress.
-- Don't hesitate to research and seek help from the Laravel community for specific challenges.
-
-Good luck with building your API!
 

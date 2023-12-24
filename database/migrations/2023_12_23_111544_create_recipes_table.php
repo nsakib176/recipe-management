@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->text('ingredients'); // Assuming a JSON string for ingredients
             $table->text('instructions');
-            $table->text('dietary_restrictions'); // Assuming a comma-separated list
+            $table->text('dietary_restrictions')->nullable(); // Assuming a comma-separated list
             $table->string('image')->nullable(); // For storing image paths
             $table->foreignId('user_id')->constrained(); // Foreign key to users table
             $table->timestamps();
