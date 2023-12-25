@@ -26,6 +26,7 @@ class RecipeController extends Controller
 
             $recipes = $recipes->paginate(10);  // Adjust pagination as needed
 
+            // TODO: Make reusable API response and implement
             return response()->json([
                 'Recipes' => $recipes
             ]);
@@ -116,6 +117,7 @@ class RecipeController extends Controller
                 'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Optional image validation
             ]);
 
+            // TODO: Create authorize with AuthServiceProvider.php file and implement
             // check if the user is authorize to update the recipe
             if ($recipe->user_id != Auth::user()->id) {
                 return response()->json([
