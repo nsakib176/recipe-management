@@ -10,6 +10,38 @@ use Illuminate\Support\Facades\Storage;
 
 class RecipeController extends Controller
 {
+    // Swagger code
+    /**
+     * @OA\Get(
+     *     path="/recipes",
+     *     tags={"Recipes"},
+     *     summary="Get a list of all recipes",
+     *     description="Retrieves a paginated list of available recipes",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             properties={
+     *                 "data": {
+     *                     type="array",
+     *                     @OA\Items(ref="#/components/schemas/RecipeResponse")
+     *                 },
+     *                 "links": {
+     *                     "$ref": "#/components/schemas/PaginationLinks"  // Assuming a pagination schema
+     *                 },
+     *                 "meta": {
+     *                     "$ref": "#/components/schemas/PaginationMeta"  // Assuming a pagination meta schema
+     *                 }
+     *             }
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     )
+     * )
+     */
     // Show all the recipes
     public function index(Request $request)
     {

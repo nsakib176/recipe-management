@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "ingredients": { "type": "string" },
+        "dietary_restrictions" : { "type": "string" },
+        "image" : { "type": "string" },
+        "user_id" : { "type": "integer" },
+        "created_at" : { "type": "string" }
+    }
+}

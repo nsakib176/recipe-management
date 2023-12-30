@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {
+        "user" : {
+            "type": "array",
+            "id": { "type": "integer" },
+            "name": { "type": "string" },
+            "email": { "type": "string", "format": "email" }
+        },
+        "access_token": { "type": "string" },
+        "token_type": { "type": "string" }
+    }
+}
