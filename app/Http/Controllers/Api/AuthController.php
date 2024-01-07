@@ -124,6 +124,7 @@ class AuthController extends Controller
      *     ),
      * )
      */
+
     public function login(Request $request)
     {
         // validate the data
@@ -184,6 +185,7 @@ class AuthController extends Controller
      *     ),
      * )
      */
+
     public function logout(Request $request)
     {
         try {
