@@ -7,50 +7,49 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 
-
 class AuthController extends Controller
 {
-    // Swagger code
     /**
      * @OA\Post(
-     *     path="/register",
+     *     path="/api/register",
+     *     operationId="registerUser",
      *     tags={"Authentication"},
-     *     summary="Register a new user for recipe management",
-     *     description="Creates a new user account to access and manage recipes",
+     *     summary="Register a new user",
+     *     description="Create a new user account with name, email, and password",
      *     @OA\RequestBody(
      *         required=true,
+     *         description="User information for registration",
      *         @OA\JsonContent(
-     *             ref="#/components/schemas/UserRegistrationRequest"
-     *         )
+     *             type="object",
+     *             required={"name", "email", "password"},
+     *             properties={
+     *                 @OA\Property(property="name", type="string", example="John Doe", description="User's full name"),
+     *                 @OA\Property(property="email", type="string", format="email", example="john.doe@example.com", description="User's email address"),
+     *                 @OA\Property(property="password", type="string", format="password", example="password123", description="User's password"),
+     *             },
+     *         ),
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="User created successfully",
+     *         description="User registered successfully",
      *         @OA\JsonContent(
-     *             ref="#/components/schemas/UserResponse"
-     *         )
+     *              type="object",
+     *              @OA\Property(property="message", type="string", example="User registered successfully"),
+     *              @OA\Property(property="user", type="object", ref="#/components/schemas/UserResponse"),
+     *              @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q"),
+     *         ),
      *     ),
      *     @OA\Response(
-     *         response=422,
-     *         description="Validation failed",
+     *         response=400,
+     *         description="Validation error or user already exists",
      *         @OA\JsonContent(
-     *             type="object",
-     *             properties={
-     *                 "errors": {
-     *                     type="object",
-     *                     additionalProperties={
-     *                         type="array",
-     *                         items={
-     *                             type="string"
-     *                         }
-     *                     }
-     *                 }
-     *             }
-     *         )
-     *     )
+     *              type="object",
+     *              @OA\Property(property="message", type="string", example="Validation error or user already exists"),
+     *              @OA\Property(property="error", type="string", example="The given data was invalid."),
+     *         ),
+     *     ),
      * )
      */
-    // Register a new user
     public function register(Request $request)
     {
         // Validate user data
@@ -85,29 +84,46 @@ class AuthController extends Controller
         }
     }
 
-    // Swagger code
+
     /**
      * @OA\Post(
-     *     path="/login",
+     *     path="/api/login",
+     *     operationId="loginUser",
      *     tags={"Authentication"},
-     *     summary="Authenticate a user and obtain an access token",
-     *     description="Logs in a user with the provided credentials and returns an access token for subsequent requests",
+     *     summary="User Login",
+     *     description="Login the user for authenticated actions for other routes.",
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/LoginRequest")
+     *         description="User information for registration",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             required={"name", "email", "password"},
+     *             properties={
+     *                 @OA\Property(property="email", type="string", format="email", example="john.doe@example.com", description="User's email address"),
+     *                 @OA\Property(property="password", type="string", format="password", example="password123", description="User's password"),
+     *             },
+     *         ),
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Login successful",
-     *         @OA\JsonContent(ref="#/components/schemas/UserResponse")
+     *         description="User registered successfully",
+     *         @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="message", type="string", example="User logged in successfully"),
+     *              @OA\Property(property="user", type="object", ref="#/components/schemas/UserResponse"),
+     *              @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q"),
+     *         ),
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Invalid credentials"
-     *     )
+     *         description="Validation error or user already exists",
+     *         @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="message", type="string", example="Invalid credentials."),
+     *         ),
+     *     ),
      * )
      */
-    // Authenticate user
     public function login(Request $request)
     {
         // validate the data
@@ -130,7 +146,7 @@ class AuthController extends Controller
                 'message' => 'User logged in successfully.',
                 'user' => $user,
                 'token' => $token,
-            ]);
+            ], 200);
         } else {
             return response()->json([
                 'message' => 'Invalid credentials.',
@@ -138,25 +154,36 @@ class AuthController extends Controller
         }
     }
 
-    // Swagger code
+
     /**
      * @OA\Post(
-     *     path="/logout",
+     *     path="/api/logout",
+     *     operationId="logoutUser",
      *     tags={"Authentication"},
-     *     summary="Invalidate the current user's access token",
-     *     description="Logs out the user by invalidating their access token, preventing further authenticated requests",
-     *     security={{"bearerAuth": {}}},  // Require authentication for logout
+     *     summary="Logout a user",
+     *     description="Invalidate the user's access token to log them out.",
+     *     security={
+     *         {"bearer": {}}
+     *     },
      *     @OA\Response(
      *         response=200,
-     *         description="Logout successful"
+     *         description="User logged out successfully",
+     *         @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="message", type="string", example="User logged out successfully"),
+     *         ),
      *     ),
      *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized"
-     *     )
+     *         response=400,
+     *         description="Unauthorized. Invalid or expired token.",
+     *         @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="message", type="string"),
+     *              @OA\Property(property="error", type="string"),
+     *         ),
+     *     ),
      * )
      */
-    // Logout user (invalidate token)
     public function logout(Request $request)
     {
         try {
